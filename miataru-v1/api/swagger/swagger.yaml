@@ -1,0 +1,175 @@
+swagger: "2.0"
+info:
+  version: "1.0.0"
+  title: Miataru
+# during dev, should point to your local machine
+host: service.miataru.com
+# basePath prefixes all resource paths 
+basePath: /
+# 
+schemes:
+  # tip: remove http to make production-grade
+  - http
+  - https
+# format of bodies a client can send (Content-Type)
+consumes:
+  - application/json
+# format of the responses to the client (Accepts)
+produces:
+  - application/json
+paths:
+  /UpdateLocation:
+     post:
+      description: This method is used to update the location of a device. The device does not need to be known already to the Miataru server but it rather creates a unique identifier for itself in the client application. This unique identifier, or device ID is then used to address this particular device.
+      operationId: updateLocation
+      produces:
+        - application/json
+      parameters:
+        - name: body
+          in: body
+          description: the body of this UpdateLocation POST request contains the JSON formatted parameters.
+          required: true
+          schema:
+            $ref: '#/definitions/MiataruUpdateLocationRequest'
+      responses:
+        '200':
+          description: successful request
+          schema:
+            $ref: '#/definitions/ACK'
+        default:
+          description: unexpected error
+          schema:
+            $ref: '#/definitions/NACK'
+  /GetLocation:
+      post:
+        description: To retrieve a specific devices latest known location the /GetLocation method is used. Please note that the MiataruConfig portion is optional. RequestMiataruDeviceID should be the ID of the device the request is sent from (or an identifier like an URL).
+        operationId: getLocation
+        produces:
+          - application/json
+        parameters:
+          - name: body
+            in: body
+            description: the complex JSON formatted datastructure to get the location of one or more devices.
+            required: true
+            schema:
+              $ref: '#/definitions/MiataruGetLocationRequest'
+        responses:
+          '200':
+            description: successful location responses
+            schema:
+              $ref: '#/definitions/GetLocationResponse'
+          default:
+            description: unexpected error or device not found
+            schema:
+              $ref: '#/definitions/NACK'
+# complex objects have schema definitions
+definitions:
+  GetLocationDevice:
+    type: object
+    required:
+      - Device
+    properties:
+      Device:
+        type: string
+        description: the unique device id of a device.
+        default: "7b8e6e0ee5296db345162dc2ef652c1350761823"
+  MiataruGetLocationRequest:
+    required:
+      - MiataruGetLocation
+    properties:
+      MiataruConfig:
+        type: object
+        description: the configuration for this request. please note that it's optional.
+        required:
+          - RequestMiataruDeviceID
+        properties:
+          RequestMiataruDeviceID:
+            type: string
+            description:  RequestMiataruDeviceID should be the ID of the device the request is sent from (or an identifier like an URL).
+            default: "6140c3c0-4a7d-40d2-99ab-39414cac3509"
+      MiataruGetLocation:
+        type: array
+        description: one or more devices in an array for which the location should be retrieved.
+        items: 
+          $ref: '#/definitions/GetLocationDevice'
+  MiataruLocation:
+    type: object
+    required:
+      - Device
+      - Timestamp
+      - Longitude
+      - Latitude
+      - HorizontalAccuracy
+    properties:
+      Device:
+        type: string
+        description: the unique id of this device. This needs to be unique as it is the only piece of information directly pointing towards this one device. Generating a GUID per device is recommended.
+        default: "7b8e6e0ee5296db345162dc2ef652c1350761823"
+      Timestamp:
+        type: string
+        description: the javascript timestamp of this location update
+        default: "1441290746967"
+      Longitude:
+        type: string
+        description: longitude of the position that is reported
+        default: "-4.394531"
+      Latitude:
+        type: string
+        description: latitude of the position that is reported
+        default: "41.079351"
+      HorizontalAccuracy:
+        type: string
+        description: the accuracy of this location update in meters
+        default: "50"
+  GetLocationResponse:
+    type: object
+    required:
+      - MiataruLocation
+    properties:
+      MiataruLocation:
+        type: array
+        items: 
+          $ref: '#/definitions/MiataruLocation'
+  MiataruUpdateLocationRequest:
+    required:
+      - MiataruConfig
+      - MiataruLocation
+    properties:
+      MiataruConfig:
+        type: object
+        description: the configuration for this request.
+        required:
+          - EnableLocationHistory
+          - LocationDataRetentionTime
+        properties:
+          EnableLocationHistory:
+            type: string
+            description: If the client tells the server to store a location history the server automatically disables the pre-configured data time-out behavior that removes location data after a given amount of time. Nevertheless the user is limited to the server-side pre-configured amount of location history entries. This is either True or False.
+            default: "False"
+          LocationDataRetentionTime:
+            type: string
+            default: "30"
+            description: The LocationDataRetentionTime is the amount of minutes the server will keep that Location Data before it is removed/deleted automatically.
+      MiataruLocation:
+        type: object
+        $ref: '#/definitions/MiataruLocation'
+  ACK:
+    required:
+      - MiataruResponse
+      - MiataruVerboseResponse
+    properties:
+      MiataruResponse:
+        type: string
+        default: "ACK"
+      MiataruVerboseResponse:
+        type: string
+  NACK:
+    required:
+      - MiataruResponse
+      - MiataruVerboseResponse
+    properties:
+      MiataruResponse:
+        type: string
+        default: "NACK"
+      MiataruVerboseResponse:
+        type: string
