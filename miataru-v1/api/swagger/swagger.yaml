@@ -32,14 +32,10 @@ paths:
         schema:
           $ref: '#/definitions/MiataruUpdateLocationRequest'
     responses:
-      '200':
+      default:
         description: successful request
         schema:
           $ref: '#/definitions/ACK'
-      default:
-        description: unexpected error
-        schema:
-          $ref: '#/definitions/NACK'
   /GetLocation:
     post:
       description: To retrieve a specific devices latest known location the /GetLocation method is used. Please note that the MiataruConfig portion is optional. RequestMiataruDeviceID should be the ID of the device the request is sent from (or an identifier like an URL).
@@ -54,14 +50,10 @@ paths:
           schema:
             $ref: '#/definitions/MiataruGetLocationRequest'
       responses:
-        '200':
+        default:
           description: successful location responses
           schema:
             $ref: '#/definitions/GetLocationResponse'
-        default:
-          description: unexpected error
-          schema:
-            $ref: '#/definitions/NACK'
   /GetLocationHistory:
     post:
       description: Location History is stored on the server only if the client told the server to do so using the “EnableLocationHistory” setting in the Location Update requests. For transitions of enabling/disabling that functionality - Everytime a Location Update is received by the server with “EnableLocationHistory=false” the server removes all stored Location History till that point. There is a server-side setting that controls up to how many Location Updates the server is storing in the Location History before it removes the oldest one. To request the Location History of a particular device the client sends the following POST request to the GetLocationHistory service URL. Please note that the MiataruConfig portion is optional. RequestMiataruDeviceID should be the ID of the device the request is sent from (or an identifier like an URL).
@@ -76,14 +68,10 @@ paths:
           schema: 
             $ref: '#/definitions/MiataruGetLocationHistoryRequest'
       responses:
-        '200':
+        default:
           description: successful location history response
           schema:
             $ref: '#/definitions/MiataruGetLocationHistoryResponse'
-        default:
-          description: unexpected error
-          schema:
-            $ref: '#/definitions/NACK'
   /GetVisitorHistory:
     post:
       description: Visitor History is stored on the server with every request to the location or location history information of a device. There is a server-side setting that controls up to how many Visitors the server is storing in the Visitor History before it removes the oldest one. To request the Visitor History of a particular device the client sends the following POST request to the GetVisitorHistory service URL.
@@ -98,15 +86,11 @@ paths:
           schema:
             $ref: '#/definitions/MiataruGetVisitorHistoryRequest'
       responses:
-        '200':
-          description: successful visitor history response
+        default:
+          description: visitor history response
           schema:
             $ref: '#/definitions/MiataruGetVisitorHistoryResponse'
-        default:
-          description: unexpected error
-          schema:
-            $ref: '#/definitions/NACK'
-            
+
 # complex objects have schema definitions
 definitions:
   MiataruVisitors:
@@ -309,15 +293,5 @@ definitions:
       MiataruResponse:
         type: string
         default: "ACK"
-      MiataruVerboseResponse:
-        type: string
-  NACK:
-    required:
-      - MiataruResponse
-      - MiataruVerboseResponse
-    properties:
-      MiataruResponse:
-        type: string
-        default: "NACK"
       MiataruVerboseResponse:
         type: string
