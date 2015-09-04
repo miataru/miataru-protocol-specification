@@ -240,7 +240,7 @@ definitions:
       Timestamp:
         type: string
         description: the javascript timestamp of this location update
-        default: "1441290746967"
+        default: "1441360863"
       Longitude:
         type: string
         description: longitude of the position that is reported
@@ -283,8 +283,9 @@ definitions:
             default: "30"
             description: The LocationDataRetentionTime is the amount of minutes the server will keep that Location Data before it is removed/deleted automatically.
       MiataruLocation:
-        type: object
-        $ref: '#/definitions/MiataruLocation'
+        type: array
+        items:
+          $ref: '#/definitions/MiataruLocation'
   ACK:
     required:
       - MiataruResponse
