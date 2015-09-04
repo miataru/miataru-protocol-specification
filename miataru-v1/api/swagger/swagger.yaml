@@ -54,6 +54,24 @@ paths:
           description: successful location responses
           schema:
             $ref: '#/definitions/MiataruGetLocationResponse'
+  /GetLocationGeoJSON/{deviceID}:
+    get:
+      description: Retrieves a devices Location in GeoJSON format.
+      operationId: getLocationGeoJSON
+      produces:
+        - application/json
+      parameters:
+        - name: deviceID
+          in: path
+          type: string
+          required: true
+          description: the unique device ID of the device the location is requested from
+          default: "7b8e6e0ee5296db345162dc2ef652c1350761823"
+      responses:
+        default:
+          description: geoJSON formatted device location
+          schema:
+            $ref: '#/definitions/MiataruGetLocationGeoJSONResponse'
   /GetLocationHistory:
     post:
       description: Location History is stored on the server only if the client told the server to do so using the “EnableLocationHistory” setting in the Location Update requests. For transitions of enabling/disabling that functionality - Everytime a Location Update is received by the server with “EnableLocationHistory=false” the server removes all stored Location History till that point. There is a server-side setting that controls up to how many Location Updates the server is storing in the Location History before it removes the oldest one. To request the Location History of a particular device the client sends the following POST request to the GetLocationHistory service URL. Please note that the MiataruConfig portion is optional. RequestMiataruDeviceID should be the ID of the device the request is sent from (or an identifier like an URL).
@@ -90,24 +108,7 @@ paths:
           description: visitor history response
           schema:
             $ref: '#/definitions/MiataruGetVisitorHistoryResponse'
-  /GetLocationGeoJSON/{deviceID}:
-    get:
-      description: Retrieves a devices Location in GeoJSON format.
-      operationId: getLocationGeoJSON
-      produces:
-        - application/json
-      parameters:
-        - name: deviceID
-          in: path
-          type: string
-          required: true
-          description: the unique device ID of the device the location is requested from
-          default: "7b8e6e0ee5296db345162dc2ef652c1350761823"
-      responses:
-        default:
-          description: geoJSON formatted device location
-          schema:
-            $ref: '#/definitions/MiataruGetLocationGeoJSONResponse'
+
 # complex objects have schema definitions
 definitions:
   MiataruVisitors:
