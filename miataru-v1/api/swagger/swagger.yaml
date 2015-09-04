@@ -90,7 +90,6 @@ paths:
           description: visitor history response
           schema:
             $ref: '#/definitions/MiataruGetVisitorHistoryResponse'
-
 # complex objects have schema definitions
 definitions:
   MiataruVisitors:
@@ -121,6 +120,7 @@ definitions:
           Amount:
             type: string
             description: the maximum number of visitor history entries to be retrieved
+            default: "10"
   MiataruGetVisitorHistoryResponse:
     required:
       - MiataruServerConfig
