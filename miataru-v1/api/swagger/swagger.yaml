@@ -12,7 +12,7 @@ info:
     url: https://raw.githubusercontent.com/miataru/miataru-protocol-specification/master/LICENSE
 # during dev, should point to your local machine
 host: service.miataru.com
-basePath: /
+basePath: /v1
 schemes:
   # tip: remove http to make production-grade
   - http
