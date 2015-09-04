@@ -2,19 +2,23 @@ swagger: "2.0"
 info:
   version: "1.0.0"
   title: Miataru
+  description: The Miataru API is very simple and straight forward. Generally you're posting (HTTP POST) a JSON formatted request to a service method locations and you get back a JSON formatted answer. Please take into consideration that this has the request-for-comment status and that it can change while there's work done on client and server applications. Versioning therefore is done by prepending the version number - /v1/ for version 1 - to the method call.
+  contact:
+    name: Miataru Team
+    email: info@miataru.com
+    url: http://miataru.com
+  license:
+    name: Public Domain
+    url: https://raw.githubusercontent.com/miataru/miataru-protocol-specification/master/LICENSE
 # during dev, should point to your local machine
 host: service.miataru.com
-# basePath prefixes all resource paths 
 basePath: /
-# 
 schemes:
   # tip: remove http to make production-grade
   - http
   - https
-# format of bodies a client can send (Content-Type)
 consumes:
   - application/json
-# format of the responses to the client (Accepts)
 produces:
   - application/json
 paths:
